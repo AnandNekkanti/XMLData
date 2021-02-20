@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="xmldata_filerFlow" doc:id="0f805c5a-fd65-4830-86da-2457a2fbbc53" >
+		<http:listener doc:name="Listener" doc:id="2c979bd3-f00b-4be9-9d84-3cceb411606d" config-ref="HTTP_Listener_config" path="/filter"/>
+		<choice doc:name="Choice" doc:id="3cfee405-d864-49cc-afce-2b2e79d621a3" >
+			<when expression='#[attributes.queryParams.value == "filter"]'>
+				<ee:transform doc:name="Transform Message" doc:id="b9edec6b-a44a-4547-b46c-aaa0e9a2ad49">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var age = attributes.queryParams.age
+var height = attributes.queryParams.height
+var city = attributes.queryParams.city
+var qualification = attributes.queryParams.qualification
+---
+{
+	AgeQulified : if (age !=null) payload.matrimony.brides.*bride filter ($.age <= age) else 0,
+	HeightQulified: if (height != null) payload.matrimony.brides.*bride filter ($.height >= height) else 0,
+	PreferedCity : if (city != null) payload.matrimony.brides.*bride filter ($.city == city) else 0, 
+	EduQualification : if (qualification != null) payload.matrimony.brides.*bride filter 
+	($.educationQualification == qualification) else 0,
+	City_Age_Satisified: if(age !=null and city !=null) payload.matrimony.brides.*bride
+	filter ($.age <=age and $.city == city) else 0
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<when expression='attributes.queryParams.value == "order"'>
+				<ee:transform doc:name="Transform Message" doc:id="5bbe7953-8c73-48ae-a6c8-2aaee9a445c0" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var brides = payload.matrimony.brides.*bride
+var param = attributes.queryParams.param
+---
+
+if(param == 'name') brides orderBy $.name else
+if(param == 'age') brides orderBy $.age else brides
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[attributes.queryParams.value=="group"]'>
+				<ee:transform doc:name="Transform Message" doc:id="99b74d65-fd31-4fe2-80ab-4c7785997c69" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var brides = payload.matrimony.brides.*bride
+var params = attributes.queryParams.param
+---
+
+if(params == 'city') brides groupBy $.city else
+if(params == 'edu') brides groupBy $.educationQualification else brides
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="16b9aea5-bbb0-4b53-9b47-434feaabfb8b" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

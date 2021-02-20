@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="brides" format="xml">
+      <types:example format="xml" element="matrimony" location="examples/matrimorydetails.xml"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#6108e5d6-c7a5-44b2-9269-8d6884003add">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="brides"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#e82ed224-0204-402f-b8c8-a12bfe361699">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="brides"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#ca9f9fcf-ebe2-494f-8f24-15ea1f7719cc">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="brides"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#b9edec6b-a44a-4547-b46c-aaa0e9a2ad49">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="brides"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#5bbe7953-8c73-48ae-a6c8-2aaee9a445c0">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="brides"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#99b74d65-fd31-4fe2-80ab-4c7785997c69">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="brides"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

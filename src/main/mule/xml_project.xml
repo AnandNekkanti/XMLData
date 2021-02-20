@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="909da2db-0f54-40dc-9ece-90a107a5fcb0" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="xml_projectFlow" doc:id="031181fa-b278-4c55-910c-5b15d2100950" >
+		<http:listener doc:name="Listener" doc:id="7961e2de-f4ef-4172-822d-293c5fcb1126" config-ref="HTTP_Listener_config" path="/xml"/>
+		<choice doc:name="Choice" doc:id="145b086d-c758-46b0-b906-df32a40c465d" >
+			<when expression='#[attributes.queryParams.value=="map"]'>
+				<ee:transform doc:name="Transform Message" doc:id="6108e5d6-c7a5-44b2-9269-8d6884003add">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/csv
+
+---
+payload.matrimony.brides.*bride map {
+	BrideName: $.name,
+	BrideAge: $.age,
+	EduQualifications: $.educationQualification,
+	Job: $.profession,
+	Income: $.monthlyIncome,
+	City: $.city
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				<file:write doc:name="Write" doc:id="a40100c2-f498-4eaa-b752-f987a53fc2e6" path="C:\Users\nekka\Desktop\details.csv" />
+			</when>
+			<when expression='#[attributes.queryParams.value=="mapObject"]'>
+				<ee:transform doc:name="Transform Message" doc:id="e82ed224-0204-402f-b8c8-a12bfe361699" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+payload.matrimony.brides.*bride map(
+	
+	$ mapObject {
+		'$$' : $
+	}
+)
+	
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<file:write doc:name="Write" doc:id="f697ef57-d50e-4b73-9ad8-9e260d42d656" path="C:\Users\nekka\Desktop\key.csv"/>
+			</when>
+			<when expression='#[attributes.queryParams.value=="pluck"]'>
+				<ee:transform doc:name="Transform Message" doc:id="ca9f9fcf-ebe2-494f-8f24-15ea1f7719cc">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var bname = attributes.queryParams.brideName
+---
+{
+	Details : payload.matrimony.brides.*bride map(if ($.name == bname)
+		{Bride_Details : $ pluck $$}
+		else null)
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="53885555-b5f1-4b5e-a260-4ed08b892af0" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

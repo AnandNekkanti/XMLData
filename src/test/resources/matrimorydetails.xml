@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<matrimony>
+    <brides>
+        <bride>
+            <name>Rakulpreet</name>
+            <age>25</age>
+            <educationQualification>Btech</educationQualification>
+            <profession>BankPO</profession>
+            <height>170</height>
+            <city>Hyderbabad</city>
+        </bride>
+        <bride>
+            <name>PoojaHegde</name>
+            <age>26</age>
+            <educationQualification>MBA</educationQualification>
+            <height>168</height>
+            <monthlyIncome>350000</monthlyIncome>
+            <city>Bangalore</city>
+        </bride>
+        <bride>
+            <name>Katrina</name>
+            <age>30</age>
+            <educationQualification>MA</educationQualification>
+            <siblings>2</siblings>
+            <height>171</height>
+            <city>Mumbai</city>
+        </bride>
+        <bride>
+            <name>Sonakshi</name>
+            <age>24</age>
+            <educationQualification>MBBS</educationQualification>
+            <height>167</height>
+            <monthlyIncome>250000</monthlyIncome>
+            <city>Mumbai</city>
+        </bride>
+    </brides>
+</matrimony>
